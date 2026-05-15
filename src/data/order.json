@@ -1,0 +1,23 @@
+[
+  {
+    "orderId": "1776962510420",
+    "items": [
+      { "productId": 3, "quantity": 2, "price": 199.99, "itemTotal": 399.98 },
+      { "productId": 2, "quantity": 4, "price": 499.99, "itemTotal": 1999.96 },
+      { "productId": 1, "quantity": 1, "price": 999.99, "itemTotal": 999.99 }
+    ],
+    "totalAmount": 3399.9300000000003,
+    "status": "shipped",
+    "orderDate": "2026-04-23T16:41:50.420Z",
+    "updatedAt": "2026-04-25T07:09:32.743Z"
+  },
+  {
+    "orderId": "1776962526986",
+    "items": [
+      { "productId": 1, "quantity": 2, "price": 999.99, "itemTotal": 1999.98 }
+    ],
+    "totalAmount": 1999.98,
+    "status": "created",
+    "orderDate": "2026-04-23T16:42:06.986Z"
+  }
+]
