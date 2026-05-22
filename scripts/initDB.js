@@ -13,11 +13,11 @@ const schemaPath = path.resolve(rootPath, "src", "db", "schemas");
 
 const schemaFiles = [
   "products.sql",
-  // "roles.sql",
+  "roles.sql",
   "users.sql",
   "carts.sql",
   "cart_items.sql",
-  // "statuses.sql",
+  "statuses.sql",
   "orders.sql",
   "order_items.sql",
 ];

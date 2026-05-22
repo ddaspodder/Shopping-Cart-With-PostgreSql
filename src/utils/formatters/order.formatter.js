@@ -25,7 +25,7 @@ const orderFormatter = (order) => {
 };
 
 const orderListFormatter = (orders) => {
-  if (!orders || orders.length === 0) return {};
+  if (!orders || orders.length === 0) return [];
 
   let order = [];
   let orderId = -1;

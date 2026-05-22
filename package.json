@@ -11,6 +11,7 @@
     "start": "cross-env NODE_ENV=production node src/server.js",
     "test": "cross-env NODE_ENV=test jest --runInBand",
     "init-db": "cross-env NODE_ENV=production node scripts/initDB.js",
+    "init-test-db": "cross-env NODE_ENV=test node scripts/initDB.js",
     "run-query": "cross-env NODE_ENV=production node scripts/query.js",
     "test:watch": "cross-env NODE_ENV=test jest --runInBand --watch",
     "lint": "eslint . --ext .js"

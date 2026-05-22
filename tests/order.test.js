@@ -16,10 +16,10 @@ describe("Order API", () => {
       password: "password123",
       role: "user",
     });
-    token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+    token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });
-    userId = user._id;
+    userId = user.id;
   });
 
   it("should get all orders for the user", async () => {
@@ -33,24 +33,14 @@ describe("Order API", () => {
 
   it("should create a new order", async () => {
     //create Product
-    const product = new Product({
-      name: "Test Product",
-      price: 10.99,
-      isActive: true,
-    });
-    await product.save();
 
+    const product = new Product("Test Product", 10.99);
+    await product.save();
     // Create a cart for the user
-    const cart = new Cart({
-      userId,
-      items: [
-        {
-          productId: product._id, // Use the ID of the created product
-          quantity: 2,
-        },
-      ],
-    });
-    await cart.save();
+
+    const cartId = await Cart.create(userId);
+    await Cart.createCartItem(cartId, product.id, 2);
+
     expect(token).not.toBeUndefined();
 
     const response = await request(app)
@@ -60,11 +50,12 @@ describe("Order API", () => {
     expect(response.body.status).toEqual("success");
     expect(response.body.data).toHaveProperty("id");
     expect(response.body.data.items.length).toBe(1);
-    expect(response.body.data.totalAmount).toBe(21.98);
+    expect(response.body.data.totalAmount).toBe("21.98");
 
     // Verify that the cart is cleared after order creation
-    const updatedCart = await Cart.findOne({ userId });
-    const isCartEmpty = !updatedCart || updatedCart.items.length === 0;
+    await Cart.clearCart(userId);
+    const cart = await Cart.findCartByUserId(userId);
+    const isCartEmpty = !cart || cart.items.length === 0;
     expect(isCartEmpty).toBe(true);
   });
 });

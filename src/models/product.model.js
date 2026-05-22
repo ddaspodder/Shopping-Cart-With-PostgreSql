@@ -13,7 +13,7 @@ class Product {
       "INSERT INTO products (name, price, is_active) VALUES ($1, $2, $3) RETURNING *",
       [this.name, this.price, this.isActive],
     );
-    return result.rows[0];
+    this.id = result.rows[0].id;
   }
 
   static async create({ name, price, isActive = true }, client = pool) {

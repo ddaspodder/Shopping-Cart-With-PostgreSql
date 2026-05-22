@@ -1,16 +1,18 @@
-const mongoose = require("mongoose");
+require("dotenv").config({ path: ".env.test" });
+const connectDB = require("../src/db/connectDB");
+
+const pool = require("../src/db/pool");
 
 beforeAll(async () => {
-  await mongoose.connect(process.env.MONGO_URI);
+  await connectDB();
 });
 
 beforeEach(async () => {
-  const collections = await mongoose.connection.db.collections();
-  for (let collection of collections) {
-    await collection.deleteMany({});
-  }
+  await pool.query(
+    "TRUNCATE TABLE order_items, orders, carts, cart_items, products, users RESTART IDENTITY CASCADE",
+  );
 });
 
 afterAll(async () => {
-  await mongoose.connection.close();
+  await pool.end();
 });

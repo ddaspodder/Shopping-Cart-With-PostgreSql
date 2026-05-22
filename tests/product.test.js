@@ -26,7 +26,7 @@ describe("Product API", () => {
       role: "admin",
     });
 
-    const token = jwt.sign({ id: admin._id }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ id: admin.id }, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });
 
@@ -42,12 +42,12 @@ describe("Product API", () => {
     expect(response.statusCode).toBe(201);
     expect(response.body.status).toEqual("success");
     expect(response.body.data.name).toBe("New Product");
-    expect(response.body.data.price).toBe(15.99);
+    expect(response.body.data.price).toBe("15.99");
 
     //product should be in database
     const product = await Product.findById(response.body.data.id);
     expect(product.name).toBe("New Product");
-    expect(product.price).toBe(15.99);
+    expect(product.price).toBe("15.99");
   });
 
   it("create product should fail if not admin", async () => {
@@ -57,7 +57,7 @@ describe("Product API", () => {
       role: "user",
     });
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });
 

@@ -3,4 +3,5 @@ module.exports = {
   verbose: true,
   testMatch: ["**/tests/**/*.test.js"],
   setupFilesAfterEnv: ["<rootDir>/tests/setup.js"],
+  timeout: 20000,
 };

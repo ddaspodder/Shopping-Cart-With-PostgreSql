@@ -14,7 +14,7 @@ class User {
       [this.email, this.password, this.role],
     );
     const user = result.rows[0];
-    return user;
+    this.id = user.id;
   }
 
   static async create({ email, password, role = "user" }, client = pool) {
