@@ -13,7 +13,7 @@ const getProductById = async (id) => {
 };
 
 const getActiveProductById = async (id) => {
-  const product = await Product.findOne({ _id: id, isActive: true });
+  const product = await Product.findOne({ id, isActive: true });
   if (!product) throw new AppError("product not found", 404);
   return product;
 };
@@ -32,20 +32,14 @@ const updateProduct = async (id, data) => {
   if (name) updatedData.name = name;
   if (price) updatedData.price = price;
 
-  const product = await Product.findByIdAndUpdate(id, updatedData, {
-    returnDocument: "after",
-  });
+  const product = await Product.findByIdAndUpdate(id, updatedData);
 
   if (!product) throw new AppError("product doesn't exist", 404);
   return product;
 };
 
 const deleteProduct = async (id) => {
-  const product = await Product.findByIdAndUpdate(
-    id,
-    { isActive: false },
-    { returnDocument: "after" },
-  );
+  const product = await Product.findByIdAndUpdate(id, { isActive: false });
   if (!product) throw new AppError("product doesn't exist", 404);
   return;
 };

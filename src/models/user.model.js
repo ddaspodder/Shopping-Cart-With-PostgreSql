@@ -1,30 +1,48 @@
-const mongoose = require("mongoose");
-const { ROLE } = require("../constants/role.constansts");
+const pool = require("../db/pool");
+const { getWhereClause } = require("../utils/partialQuery");
 
-const userSchema = new mongoose.Schema(
-  {
-    email: {
-      type: String,
-      required: true,
-      unique: true,
-      lowercase: true,
-      trim: true,
-    },
-    password: {
-      type: String,
-      required: true,
-      minlength: 6,
-      select: false,
-    },
-    role: {
-      type: String,
-      enum: Object.values(ROLE),
-      default: ROLE.USER,
-    },
-  },
-  { timestamps: true },
-);
+class User {
+  constructor(email, password, role = "user") {
+    this.email = email;
+    this.password = password;
+    this.role = role;
+  }
 
-const User = mongoose.model("User", userSchema);
+  async save(client = pool) {
+    const result = await client.query(
+      "INSERT INTO users (email, password, role) VALUES ($1, $2, $3) RETURNING *",
+      [this.email, this.password, this.role],
+    );
+    const user = result.rows[0];
+    return user;
+  }
+
+  static async create({ email, password, role = "user" }, client = pool) {
+    const result = await client.query(
+      "INSERT INTO users (email, password, role) VALUES ($1, $2, $3) RETURNING *",
+      [email, password, role],
+    );
+    const user = result.rows[0];
+    return user;
+  }
+
+  static async findOne(data, client = pool) {
+    const { queryPart, values } = getWhereClause(data);
+    const result = await client.query(
+      `SELECT * FROM users ${queryPart}`,
+      values,
+    );
+    const user = result.rows[0];
+    return user;
+  }
+
+  static async findById(id, client = pool) {
+    const result = await client.query("SELECT * FROM users WHERE id = $1", [
+      id,
+    ]);
+    const user = result.rows[0];
+    return user;
+  }
+}
 
 module.exports = User;

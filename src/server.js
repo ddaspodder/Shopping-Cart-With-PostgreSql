@@ -2,7 +2,7 @@ const http = require("http");
 
 const app = require("./app");
 
-const connectDB = require("./config/db");
+const connectDB = require("./db/connectDB");
 connectDB();
 
 const server = http.createServer(app);

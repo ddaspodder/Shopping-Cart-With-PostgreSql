@@ -1,6 +1,6 @@
 const productFormatter = (product) => {
   return {
-    id: product._id.toString(),
+    id: product.id.toString(),
     name: product.name,
     price: product.price,
   };

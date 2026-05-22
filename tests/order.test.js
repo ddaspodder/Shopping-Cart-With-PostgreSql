@@ -23,7 +23,6 @@ describe("Order API", () => {
   });
 
   it("should get all orders for the user", async () => {
-    console.log("token", token, userId);
     const response = await request(app)
       .get("/api/orders")
       .set("Authorization", `Bearer ${token}`);

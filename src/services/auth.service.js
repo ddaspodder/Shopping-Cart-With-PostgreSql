@@ -10,7 +10,7 @@ const register = async (userData) => {
   const hashedPassword = await bcrypt.hash(password, salt);
   try {
     const user = await User.create({ ...userData, password: hashedPassword });
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });
     return { user, token };
@@ -24,12 +24,12 @@ const register = async (userData) => {
 };
 
 const signIn = async (email, password) => {
-  const user = await User.findOne({ email }).select("+password");
+  const user = await User.findOne({ email });
   if (!user) throw new AppError("invalid email or password", 401);
   const hashedPassword = user.password;
   const isPasswordCorrect = await bcrypt.compare(password, hashedPassword);
   if (!isPasswordCorrect) throw new AppError("invalid email or password", 401);
-  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+  const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
     expiresIn: "1h",
   });
   return { token };

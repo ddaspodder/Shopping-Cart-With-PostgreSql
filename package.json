@@ -10,6 +10,8 @@
     "dev": "cross-env NODE_ENV=development nodemon src/server.js",
     "start": "cross-env NODE_ENV=production node src/server.js",
     "test": "cross-env NODE_ENV=test jest --runInBand",
+    "init-db": "cross-env NODE_ENV=production node scripts/initDB.js",
+    "run-query": "cross-env NODE_ENV=production node scripts/query.js",
     "test:watch": "cross-env NODE_ENV=test jest --runInBand --watch",
     "lint": "eslint . --ext .js"
   },
@@ -28,7 +30,7 @@
     "express-rate-limit": "^8.4.1",
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.3",
-    "mongoose": "^9.5.0",
+    "pg": "^8.21.0",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"
   }
