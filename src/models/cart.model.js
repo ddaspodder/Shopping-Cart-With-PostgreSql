@@ -7,7 +7,7 @@ const findCartByUserId = async (userId, client = pool) => {
   return res.rows[0];
 };
 
-const getCartItemsWithActiveProduct = async (userId, client = pool) => {
+const findCartItemsByUserId = async (userId, client = pool) => {
   const res = await client.query(
     `SELECT c.id, c.user_id, c.created_at, c.updated_at,
       p.id as product_id, p.name, p.price, ci.quantity  
@@ -19,7 +19,7 @@ const getCartItemsWithActiveProduct = async (userId, client = pool) => {
   return res.rows;
 };
 
-const create = async (userId, client = pool) => {
+const createCart = async (userId, client = pool) => {
   const res = await client.query(
     "INSERT INTO carts(user_id) VALUES($1) RETURNING id",
     [userId],
@@ -35,7 +35,11 @@ const createCartItem = async (cartId, productId, quantity, client = pool) => {
   return res.rows[0].id;
 };
 
-const findCartItem = async (cartId, productId, client = pool) => {
+const findCartItemByIdAndProductId = async (
+  cartId,
+  productId,
+  client = pool,
+) => {
   const res = await client.query(
     "SELECT id, quantity FROM cart_items WHERE cart_id = $1 AND product_id = $2",
     [cartId, productId],
@@ -49,7 +53,7 @@ const increaseCartItemQuantity = async (
   client = pool,
 ) => {
   await client.query(
-    "UPDATE cart_items SET quantity = quantity + $1 WHERE id = $2",
+    "UPDATE cart_items SET quantity = quantity + $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2",
     [quantity, cartItemId],
   );
 };
@@ -60,7 +64,7 @@ const decreaseCartItemQuantity = async (
   client = pool,
 ) => {
   await client.query(
-    "UPDATE cart_items SET quantity = quantity - $1 WHERE id = $2",
+    "UPDATE cart_items SET quantity = quantity - $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2",
     [quantity, cartItemId],
   );
 };
@@ -69,19 +73,27 @@ const deleteCartItem = async (cartItemId, client = pool) => {
   await client.query("DELETE FROM cart_items WHERE id = $1", [cartItemId]);
 };
 
-const clearCart = async (userId, client = pool) => {
+const deleteCart = async (userId, client = pool) => {
   await client.query("DELETE FROM carts WHERE user_id = $1", [userId]);
   return null;
 };
 
+const updateCartTimestamp = async (cartId, client = pool) => {
+  await client.query(
+    "UPDATE carts SET updated_at = CURRENT_TIMESTAMP WHERE id = $1",
+    [cartId],
+  );
+};
+
 module.exports = {
-  create,
+  createCart,
   findCartByUserId,
-  getCartItemsWithActiveProduct,
-  clearCart,
+  findCartItemsByUserId,
+  deleteCart,
   deleteCartItem,
   increaseCartItemQuantity,
   decreaseCartItemQuantity,
   createCartItem,
-  findCartItem,
+  findCartItemByIdAndProductId,
+  updateCartTimestamp,
 };

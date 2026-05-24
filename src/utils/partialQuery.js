@@ -1,5 +1,3 @@
-const { get } = require("../app");
-
 const camelToSnakeCase = (str) => {
   return str.replace(/([A-Z])/g, "_$1").toLowerCase();
 };

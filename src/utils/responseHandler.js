@@ -5,10 +5,10 @@ const success = (res, data = null, code = 200) => {
   });
 };
 
-const failure = (res, err, code) => {
-  res.status(code || err.statusCode || 500).json({
+const failure = (res, message, code) => {
+  res.status(code || 500).json({
     status: "failure",
-    message: err.message || "internal server error",
+    message: message || "internal server error",
   });
 };
 

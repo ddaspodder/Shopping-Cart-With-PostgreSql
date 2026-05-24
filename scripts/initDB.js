@@ -2,9 +2,8 @@ const path = require("path");
 
 const fs = require("fs");
 
-require("dotenv").config({
-  path: process.env.NODE_ENV === "test" ? ".env.test" : ".env",
-});
+const { setupEnv } = require("../src/utils/configureEnvironment");
+setupEnv();
 
 const pool = require("../src/db/pool");
 const rootPath = process.cwd();
