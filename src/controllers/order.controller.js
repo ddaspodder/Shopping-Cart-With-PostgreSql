@@ -36,12 +36,11 @@ const getOrderByIdController = asyncHandler(async (req, res) => {
 });
 
 const updateStatusController = asyncHandler(async (req, res) => {
-  const userId = req.user.id;
   const id = req.params.id;
   const { status } = req.body;
   if (!id) throw new AppError("bad id", 400);
   if (!status) throw new AppError("status is required", 400);
-  const order = await updateStatus(userId, id, status);
+  const order = await updateStatus(id, status);
   success(res, orderFormatter(order));
 });
 

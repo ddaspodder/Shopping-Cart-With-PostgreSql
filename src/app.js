@@ -59,7 +59,7 @@ app.use("/api/cart", cartRoutes);
 app.use("/api/orders", orderRoutes);
 
 app.get("/", (req, res) => {
-  res.send("Express and MongoDB Shopping API");
+  res.send("Express and PostgreSql Shopping API");
 });
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));

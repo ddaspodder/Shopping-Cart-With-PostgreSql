@@ -1,6 +1,6 @@
 const pool = require("../db/pool");
 
-const getOrdersByUserId = async (userId, client = pool) => {
+const findOrdersWithItemsByUserId = async (userId, client = pool) => {
   const res = await client.query(
     `SELECT o.id, o.user_id, p.id as product_id, p.name, p.price, 
     oi.quantity, o.total_amount, o.status, o.created_at, o.updated_at
@@ -12,15 +12,15 @@ const getOrdersByUserId = async (userId, client = pool) => {
   return res.rows;
 };
 
-const getOrderById = async (userId, id, client = pool) => {
+const findOrderWithItemsById = async (id, client = pool) => {
   const res = await client.query(
     `SELECT o.id, o.user_id, p.id as product_id, p.name, p.price, 
     oi.quantity, o.total_amount, o.status, o.created_at, o.updated_at
     FROM orders AS o INNER JOIN order_items AS oi ON o.id = oi.order_id
     INNER JOIN products AS p ON oi.product_id = p.id 
-    where o.user_id = $1 AND o.id = $2 AND p.is_active = TRUE 
+    where o.id = $1 AND p.is_active = TRUE 
     ORDER BY oi.created_at DESC`,
-    [userId, id],
+    [id],
   );
   return res.rows;
 };
@@ -51,13 +51,18 @@ const createOrder = async (userId, client = pool) => {
   return orderId;
 };
 
-const updateStatus = async (userId, id, status, client = pool) => {
+const updateOrderStatus = async (id, status, client = pool) => {
   const res = await client.query(
-    `UPDATE orders SET status = $1 WHERE user_id = $2 AND id = $3
+    `UPDATE orders SET status = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2
     RETURNING id`,
-    [status, userId, id],
+    [status, id],
   );
-  return res.rows[0].id;
+  return res.rows[0]?.id;
 };
 
-module.exports = { getOrdersByUserId, getOrderById, createOrder, updateStatus };
+module.exports = {
+  findOrdersWithItemsByUserId,
+  findOrderWithItemsById,
+  createOrder,
+  updateOrderStatus,
+};

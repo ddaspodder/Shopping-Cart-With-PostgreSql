@@ -1,0 +1,2 @@
+ALTER TABLE users
+ALTER role SET NOT NULL;

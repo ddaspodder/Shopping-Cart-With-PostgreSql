@@ -27,6 +27,26 @@ const orderFormatter = (order) => {
 const orderListFormatter = (orders) => {
   if (!orders || orders.length === 0) return [];
 
+  const orderMap = new Map();
+  for (const orderItem of orders) {
+    const id = orderItem.id;
+    if (orderMap.has(id)) {
+      const orderItems = orderMap.get(id);
+      orderItems.push(orderItem);
+    } else {
+      orderMap.set(id, [orderItem]);
+    }
+  }
+
+  const formattedOrders = [...orderMap.values()].map((order) =>
+    orderFormatter(order),
+  );
+  return formattedOrders;
+};
+
+const orderListGroupedByIdFormatter = (orders) => {
+  if (!orders || orders.length === 0) return [];
+
   let order = [];
   let orderId = -1;
   const formattedOrders = [];
@@ -50,4 +70,8 @@ const orderListFormatter = (orders) => {
   return formattedOrders;
 };
 
-module.exports = { orderFormatter, orderListFormatter };
+module.exports = {
+  orderFormatter,
+  orderListFormatter,
+  orderListGroupedByIdFormatter,
+};

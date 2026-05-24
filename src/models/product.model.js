@@ -24,7 +24,7 @@ class Product {
     return result.rows[0];
   }
 
-  static async find(data, client = pool) {
+  static async findAll(data, client = pool) {
     const { queryPart, values } = getWhereClause(data);
     const result = await client.query(
       `SELECT * FROM products ${queryPart}`,
@@ -50,7 +50,7 @@ class Product {
     return result.rows[0];
   }
 
-  static async findByIdAndUpdate(id, data, client = pool) {
+  static async updateById(id, data, client = pool) {
     const { queryPart, values } = getUpdateClause(data);
     const result = await client.query(
       `UPDATE products ${queryPart} WHERE id = $${values.length + 1} RETURNING *`,
