@@ -7,6 +7,7 @@ const {
 } = require("../controllers/product.controller");
 
 const {
+  getAllProductsValidator,
   createProductValidator,
   updateProductValidator,
 } = require("../middleware/validators/product.validator");
@@ -52,7 +53,7 @@ const router = express.Router();
  *         $ref: '#/components/responses/Internal'
  */
 
-router.get("/", getAllProductsController);
+router.get("/", getAllProductsValidator, getAllProductsController);
 
 router.get("/:id", paramsValidator(["id"]), getProductController);
 

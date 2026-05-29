@@ -1,0 +1,1 @@
+SELECT *, RANK() OVER ( ORDER BY price ) FROM products;

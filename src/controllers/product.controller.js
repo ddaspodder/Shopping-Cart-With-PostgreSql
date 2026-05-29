@@ -7,6 +7,8 @@ const {
   deleteProduct,
 } = require("../services/product.service");
 
+const { getAllProductsQueryParser } = require("../utils/queryParser");
+
 const {
   productFormatter,
   productListFormatter,
@@ -17,7 +19,9 @@ const AppError = require("../utils/appError");
 const { success } = require("../utils/responseHandler");
 
 const getAllProductsController = asyncHandler(async (req, res) => {
-  const products = await getAllProducts();
+  const { filters, sort, limit, offset } = getAllProductsQueryParser(req.query);
+  console.log(filters, sort, limit, offset);
+  const products = await getAllProducts({ filters, sort, limit, offset });
   success(res, productListFormatter(products));
 });
 

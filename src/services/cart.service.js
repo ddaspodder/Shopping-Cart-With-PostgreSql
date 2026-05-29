@@ -4,12 +4,13 @@ const pool = require("../db/pool");
 const Product = require("../models/product.model");
 
 const getCart = async (userId) => {
-  const cart = await Cart.findCartItemsByUserId(userId);
-  if (!cart || cart.length == 0) {
-    await Cart.deleteCart(userId);
+  const cart = await Cart.findCartByUserId(userId);
+  if (!cart) {
     throw new AppError("Cart not found", 404);
   }
-  return cart;
+  await Cart.deleteCartItemsWithInactiveProductsByUserId(userId);
+  const cartWithItems = await Cart.findCartItemsByUserId(userId);
+  return cartWithItems;
 };
 
 const addToCart = async (userId, productId, quantity) => {
@@ -109,7 +110,7 @@ const clearCart = async (userId) => {
   if (!cart) {
     throw new AppError("Cart not found", 404);
   }
-  await Cart.deleteCart(userId);
+  await Cart.deleteCartItemsByUserId(userId);
   return null;
 };
 

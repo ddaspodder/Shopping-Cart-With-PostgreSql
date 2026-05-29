@@ -23,7 +23,7 @@ const createOrder = async (userId) => {
         400,
       );
     const orderId = await Order.createOrder(userId, client);
-    await Cart.deleteCart(userId, client);
+    await Cart.deleteCartItemsByUserId(userId, client);
     await client.query("COMMIT");
     const order = await Order.findOrderWithItemsById(orderId);
     return order;

@@ -1,8 +1,11 @@
 const AppError = require("../utils/appError");
 const Product = require("../models/product.model");
 
-const getAllProducts = async () => {
-  const products = await Product.findAll({ isActive: true });
+const getAllProducts = async ({ filters, ...options }) => {
+  const products = await Product.findAll({
+    filters: { isActive: true, ...filters },
+    ...options,
+  });
   return products;
 };
 
