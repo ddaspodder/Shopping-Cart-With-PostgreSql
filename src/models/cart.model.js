@@ -78,6 +78,43 @@ const deleteCart = async (userId, client = pool) => {
   return null;
 };
 
+const deleteCartItemsByUserId = async (userId, client = pool) => {
+  await client.query(
+    `DELETE FROM cart_items
+WHERE
+    cart_id = (
+        SELECT DISTINCT
+            id
+        FROM cartS
+        WHERE
+            user_id = $1
+    )`,
+    [userId],
+  );
+};
+
+const deleteCartItemsWithInactiveProductsByUserId = async (
+  userId,
+  client = pool,
+) => {
+  await client.query(
+    `DELETE FROM cart_items
+WHERE
+    id IN (
+        SELECT DISTINCT
+            ci.id
+        FROM
+            carts as c
+            INNER JOIN cart_items as ci ON c.id = ci.cart_id
+            INNER JOIN products as p ON ci.product_id = p.id
+        WHERE
+            c.user_id = $1
+            AND p.is_active = FALSE
+    )`,
+    [userId],
+  );
+};
+
 const updateCartTimestamp = async (cartId, client = pool) => {
   await client.query(
     "UPDATE carts SET updated_at = CURRENT_TIMESTAMP WHERE id = $1",
@@ -96,4 +133,6 @@ module.exports = {
   createCartItem,
   findCartItemByIdAndProductId,
   updateCartTimestamp,
+  deleteCartItemsByUserId,
+  deleteCartItemsWithInactiveProductsByUserId,
 };

@@ -1,5 +1,10 @@
 const pool = require("../db/pool");
-const { getUpdateClause, getWhereClause } = require("../utils/partialQuery");
+const {
+  buildUpdateClause,
+  buildWhereClause,
+  buildFilterClause,
+  buildSortClause,
+} = require("../utils/queryBuilder");
 
 class Product {
   constructor(name, price, isActive = true) {
@@ -24,12 +29,21 @@ class Product {
     return result.rows[0];
   }
 
-  static async findAll(data, client = pool) {
-    const { queryPart, values } = getWhereClause(data);
-    const result = await client.query(
-      `SELECT * FROM products ${queryPart}`,
-      values,
-    );
+  static async findAll({ filters, sort = [], limit, offset }, client = pool) {
+    const { queryPart: filterQueryPart, values } = buildFilterClause(filters);
+    const sortQueryPart = buildSortClause(sort);
+
+    const aggregateValues = [...values];
+    if (limit) aggregateValues.push(limit);
+    if (offset) aggregateValues.push(offset);
+
+    const limitQueryPart = limit ? `LIMIT $${values.length + 1}` : "";
+    const offsetQueryPart = offset ? `OFFSET $${values.length + 2}` : "";
+
+    const aggregatedQuery = `SELECT * FROM products ${filterQueryPart} ${sortQueryPart} ${limitQueryPart} ${offsetQueryPart}`;
+
+    console.log(aggregatedQuery, aggregateValues);
+    const result = await client.query(aggregatedQuery, aggregateValues);
     return result.rows;
   }
 
@@ -41,7 +55,7 @@ class Product {
   }
 
   static async findOne(data, client = pool) {
-    const { queryPart, values } = getWhereClause(data);
+    const { queryPart, values } = buildWhereClause(data);
 
     const result = await client.query(
       `SELECT * FROM products ${queryPart}`,
@@ -51,7 +65,7 @@ class Product {
   }
 
   static async updateById(id, data, client = pool) {
-    const { queryPart, values } = getUpdateClause(data);
+    const { queryPart, values } = buildUpdateClause(data);
     const result = await client.query(
       `UPDATE products ${queryPart} WHERE id = $${values.length + 1} RETURNING *`,
       [...values, id],

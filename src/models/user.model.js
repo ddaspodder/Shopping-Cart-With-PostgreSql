@@ -1,5 +1,5 @@
 const pool = require("../db/pool");
-const { getWhereClause } = require("../utils/partialQuery");
+const { buildWhereClause } = require("../utils/queryBuilder");
 
 class User {
   constructor(email, password, role = "user") {
@@ -27,7 +27,7 @@ class User {
   }
 
   static async findOne(data, client = pool) {
-    const { queryPart, values } = getWhereClause(data);
+    const { queryPart, values } = buildWhereClause(data);
     const result = await client.query(
       `SELECT * FROM users ${queryPart}`,
       values,
