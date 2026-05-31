@@ -1,8 +1,16 @@
 module.exports = {
-  files: ["**/*.js"],
+  files: ["**/*.js", "**/*.ts"],
   languageOptions: {
+    parser: require.resolve("@typescript-eslint/parser"),
+    parserOptions: {
+      project: "./tsconfig.json",
+      tsconfigRootDir: __dirname,
+      ecmaVersion: 2021,
+      sourceType: "module",
+      extraFileExtensions: [".ts", ".tsx"],
+    },
     ecmaVersion: 2021,
-    sourceType: "script",
+    sourceType: "module",
     globals: {
       process: "readonly",
       module: "readonly",
@@ -23,11 +31,16 @@ module.exports = {
       jest: "readonly",
     },
   },
+  plugins: {
+    "@typescript-eslint": require("@typescript-eslint/eslint-plugin"),
+  },
   linterOptions: {
     reportUnusedDisableDirectives: true,
   },
   rules: {
-    "no-unused-vars": ["warn"],
+    // Use TypeScript-aware rule instead of the base rule
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": ["warn"],
     "no-undef": "error",
     "no-console": "off",
   },
