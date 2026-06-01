@@ -48,7 +48,7 @@
   },
 
   // Files to include in the project (adjust as needed)
-  "include": ["src", "tests", "scripts"],
+  "include": ["src", "tests", "scripts", "*.config.ts"],
 
   // Common excludes
   "exclude": ["node_modules", "dist"]
