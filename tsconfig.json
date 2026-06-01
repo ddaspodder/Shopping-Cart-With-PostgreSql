@@ -1,0 +1,55 @@
+{
+  // Basic TypeScript configuration (JSONC allowed) for mixed TS/JS projects.
+  // This file enables compiling both .ts and .js files and helps TypeScript
+  // interoperate with CommonJS and ES module styles.
+  "compilerOptions": {
+    // Allow compiling JavaScript files alongside TypeScript.
+    "allowJs": true, // permit importing/compiling .js files
+    // "checkJs": true,                 // (commented) enable type-checking for .js files
+
+    // Module and interop settings
+    "module": "nodenext", // support both CJS & ESM depending on file or package.json "type"
+    "moduleResolution": "nodenext", // resolve modules like Node.js (supports .js/.ts/.json)
+    "target": "es2020", // output JS syntax target (change for wider compatibility)
+    "esModuleInterop": true, // enable default import interop for CommonJS modules
+    "allowSyntheticDefaultImports": true, // allow `import x from 'cjs'` when no default exists
+
+    // Project layout
+    // "rootDir": "./src",            // (commented) root of source files
+    "outDir": "./dist", // compiled output directory
+
+    // Source maps & declarations
+    "sourceMap": true, // generate sourcemaps for debugging
+    // "declaration": true,             // (commented) generate .d.ts declaration files
+    // "declarationMap": true,          // (commented) map .d.ts back to source
+
+    // Strictness and quality
+    "strict": true, // enable all strict type-checking options
+    "noImplicitAny": true, // (commented) catch implicit any types
+    "noImplicitReturns": true, // ensure functions explicitly return on all code paths
+    "noUncheckedIndexedAccess": true, // make indexed access types more accurate
+
+    // Performance / tooling
+    "skipLibCheck": true, // skip type checking of declaration files for speed
+    "resolveJsonModule": true, // allow importing JSON files
+
+    // JSX (if you use React)
+    "jsx": "react-jsx", // modern JSX transform, change to "react" or "preserve" as needed
+
+    // Helpful Node options
+    "types": ["node"], // restrict automatic @types includes (e.g., add "node" when needed)
+    "lib": ["es2020"], // (commented) include runtime libs (DOM, ESNext, etc.)
+
+    // Enable isolatedModules for build tools like babel/ts-node
+    "isolatedModules": true, // ensures each file can be transpiled independently
+
+    // Preserve original module syntax where possible (useful with bundlers)
+    "verbatimModuleSyntax": false
+  },
+
+  // Files to include in the project (adjust as needed)
+  "include": ["src", "tests", "scripts"],
+
+  // Common excludes
+  "exclude": ["node_modules", "dist"]
+}
