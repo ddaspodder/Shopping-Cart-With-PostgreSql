@@ -1,16 +1,40 @@
 import AppError from "../utils/appError";
-import Cart from "../models/cart.model";
-import pool from "../db/pool";
-import Product from "../models/product.model";
-import { CartWithItemsRow } from "../types/cart.types";
+import { prisma } from "../db/prisma";
 
-export const getCart = async (userId: number): Promise<CartWithItemsRow[]> => {
-  const cart = await Cart.findCartByUserId(userId);
+export const getCart = async (userId: number) => {
+  const cart = await prisma.carts.findUnique({ where: { userId } });
   if (!cart) {
     throw new AppError("Cart not found", 404);
   }
-  await Cart.deleteCartItemsWithInactiveProductsByUserId(userId);
-  const cartWithItems = await Cart.findCartItemsByUserId(userId);
+  //delete all cart items with inactive products for the particular user
+  await prisma.cartItems.deleteMany({
+    where: {
+      carts: { userId },
+      products: {
+        isActive: false,
+      },
+    },
+  });
+
+  //find all cart with items(which has active products)
+  const cartWithItems = await prisma.carts.findUnique({
+    where: { userId },
+    include: {
+      cartItems: {
+        where: {
+          products: {
+            isActive: true,
+          },
+        },
+        include: {
+          products: true,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      },
+    },
+  });
   return cartWithItems;
 };
 
@@ -18,109 +42,106 @@ export const addToCart = async (
   userId: number,
   productId: number,
   quantity: number,
-): Promise<CartWithItemsRow[]> => {
-  const client = await pool.connect();
-  try {
-    await client.query("BEGIN");
-    const activeProduct = await Product.findOne({
-      id: productId,
-      isActive: true,
+) => {
+  return prisma.$transaction(async (tx) => {
+    const activeProduct = await tx.products.findUnique({
+      where: {
+        id: productId,
+        isActive: true,
+      },
     });
 
     if (!activeProduct) throw new AppError("product not found", 404);
 
-    const cart = await Cart.findCartByUserId(userId, client);
+    const cart = await tx.carts.findUnique({ where: { userId } });
 
     if (!cart) {
-      const cartId = await Cart.createCart(userId, client);
-      await Cart.createCartItem(cartId, productId, quantity, client);
+      await tx.carts.create({
+        data: { userId, cartItems: { create: { productId, quantity } } },
+      });
     } else {
       const cartId = cart.id;
-      const cartItem = await Cart.findCartItemByIdAndProductId(
-        cartId,
-        productId,
-        client,
-      );
-      if (!cartItem) {
-        await Cart.createCartItem(cartId, productId, quantity, client);
-      } else {
-        const cartItemId = cartItem.id;
-        await Cart.increaseCartItemQuantity(cartItemId, quantity, client);
-      }
-      await Cart.updateCartTimestamp(cartId, client);
+      await tx.cartItems.upsert({
+        create: { cartId, productId, quantity },
+        update: { quantity: { increment: quantity } },
+        where: { cartId_productId: { cartId, productId } },
+      });
     }
-
-    await client.query("COMMIT");
-    const updated = await Cart.findCartItemsByUserId(userId, client);
+    const updated = await tx.carts.findUnique({
+      where: { userId },
+      include: {
+        cartItems: {
+          include: { products: true },
+        },
+      },
+    });
     return updated;
-  } catch (err) {
-    await client.query("ROLLBACK");
-    throw err;
-  } finally {
-    client.release();
-  }
+  });
 };
 
 export const removeFromCart = async (
   userId: number,
   productId: number,
   quantity: number,
-): Promise<CartWithItemsRow[]> => {
-  const client = await pool.connect();
-  try {
-    await client.query("BEGIN");
-    const activeProduct = await Product.findOne(
-      {
+) => {
+  return prisma.$transaction(async (tx) => {
+    const activeProduct = await tx.products.findUnique({
+      where: {
         id: productId,
         isActive: true,
       },
-      client,
-    );
+    });
     if (!activeProduct) throw new AppError("product not found", 404);
 
-    const cart = await Cart.findCartByUserId(userId, client);
+    const cart = await tx.carts.findUnique({ where: { userId } });
 
     if (!cart) {
       throw new AppError("Cart not found", 404);
     } else {
       const cartId = cart.id;
-      const cartItem = await Cart.findCartItemByIdAndProductId(
-        cartId,
-        productId,
-        client,
-      );
+      const cartItem = await tx.cartItems.findUnique({
+        where: { cartId_productId: { cartId, productId } },
+      });
       if (!cartItem) {
         throw new AppError("Product not in cart", 404);
       } else {
         const cartItemId = cartItem.id;
         const currentQuantity = cartItem.quantity;
         if (currentQuantity <= quantity) {
-          await Cart.deleteCartItem(cartItemId, client);
+          await tx.cartItems.delete({ where: { id: cartItemId } });
         } else {
-          await Cart.decreaseCartItemQuantity(cartItemId, quantity, client);
+          await tx.cartItems.update({
+            data: { quantity: { decrement: quantity } },
+            where: { id: cartItemId },
+          });
         }
-        await Cart.updateCartTimestamp(cartId, client);
       }
     }
-
-    await client.query("COMMIT");
-    const updated = await Cart.findCartItemsByUserId(userId, client);
+    const updated = await tx.carts.findUnique({
+      where: { userId },
+      include: {
+        cartItems: {
+          include: { products: true },
+        },
+      },
+    });
     return updated;
-  } catch (err) {
-    await client.query("ROLLBACK");
-    throw err;
-  } finally {
-    client.release();
-  }
+  });
 };
 
-export const clearCart = async (userId: number): Promise<null> => {
-  const cart = await Cart.findCartByUserId(userId);
+export const clearCart = async (userId: number) => {
+  const cart = await prisma.carts.findUnique({ where: { userId } });
   if (!cart) {
     throw new AppError("Cart not found", 404);
   }
-  await Cart.deleteCartItemsByUserId(userId);
-  return null;
+  await prisma.cartItems.deleteMany({
+    where: {
+      carts: {
+        userId,
+      },
+    },
+  });
+  return cart;
 };
 
 export default {

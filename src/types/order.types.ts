@@ -1,4 +1,4 @@
-import { STATUS } from "../constants/order.constants";
+import { STATUS } from "../../depreciated/constants/order.constants";
 
 export interface OrderWithItemsRow {
   id: number;

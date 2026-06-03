@@ -1,13 +1,12 @@
 import { Request, Response } from "express";
 import { register, signIn } from "../services/auth.service";
 import asyncHandler from "../utils/asyncHandler";
-import { success } from "../utils/responseHandler";
-import { formatUser } from "../utils/formatters/user.formatter";
+import { success } from "../../depreciated/utils/responseHandler";
 
 export const registerController = asyncHandler(
   async (req: Request, res: Response) => {
     const { user, token } = await register(req.body);
-    success(res, { user: formatUser(user), token }, 201);
+    success(res, { user: user, token }, 201);
   },
 );
 

@@ -17,9 +17,14 @@ export interface GetAllProductsQuery {
 //   isActive?: boolean;
 // };
 
+interface Pattern {
+  contains: string;
+  mode: "insensitive";
+}
+
 export interface ParsedProductFilters {
-  name?: string | { pattern: string };
-  price?: string | { pattern: string };
+  name?: string | Pattern;
+  price?: string | Pattern;
 }
 
 export interface ProductFilters extends ParsedProductFilters {

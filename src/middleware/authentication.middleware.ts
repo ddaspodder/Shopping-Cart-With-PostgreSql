@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
-import User from "../models/user.model";
 import AppError from "../utils/appError";
 import jwt from "jsonwebtoken";
+import { getUserById } from "../services/auth.service";
 
 export const authMiddleware: RequestHandler = async (req, res, next) => {
   const authHeader = req.headers.authorization;
@@ -20,7 +20,7 @@ export const authMiddleware: RequestHandler = async (req, res, next) => {
     if (!userId) {
       return next(new AppError("Unauthorized", 401));
     }
-    const user = await User.findById(Number(userId));
+    const user = await getUserById(Number(userId));
     if (!user) return next(new AppError("Unauthorized", 401));
     req.user = user;
     next();

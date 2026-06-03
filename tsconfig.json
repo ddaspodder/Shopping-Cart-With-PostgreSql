@@ -10,8 +10,9 @@
     // Module and interop settings
     "module": "nodenext", // support both CJS & ESM depending on file or package.json "type"
     "moduleResolution": "nodenext", // resolve modules like Node.js (supports .js/.ts/.json)
-    "target": "es2020", // output JS syntax target (change for wider compatibility)
+    "target": "es2023", // output JS syntax target (change for wider compatibility)
     "esModuleInterop": true, // enable default import interop for CommonJS modules
+    "ignoreDeprecations": "6.0",
     "allowSyntheticDefaultImports": true, // allow `import x from 'cjs'` when no default exists
 
     // Project layout
@@ -38,7 +39,7 @@
 
     // Helpful Node options
     "types": ["node"], // restrict automatic @types includes (e.g., add "node" when needed)
-    "lib": ["es2020"], // (commented) include runtime libs (DOM, ESNext, etc.)
+    // "lib": ["es2020"], // (commented) include runtime libs (DOM, ESNext, etc.)
 
     // Enable isolatedModules for build tools like babel/ts-node
     "isolatedModules": true, // ensures each file can be transpiled independently
@@ -48,8 +49,30 @@
   },
 
   // Files to include in the project (adjust as needed)
-  "include": ["src", "tests", "scripts", "*.config.ts"],
+  "include": [
+    "src",
+    "depreciated/tests",
+    "depreciated/scripts",
+    "*.config.ts",
+    "depreciated/constants",
+    "depreciated/db/connectDB.ts",
+    "depreciated/db/db.types.ts",
+    "depreciated/db/pool.ts",
+    "depreciated/utils/formatters",
+    "depreciated/utils/queryBuilder",
+    "depreciated/utils/responseHandler.ts"
+  ],
 
   // Common excludes
   "exclude": ["node_modules", "dist"]
 }
+// {
+//   "compilerOptions": {
+//     "module": "ESNext",
+//     "moduleResolution": "bundler",
+//     "target": "ES2023",
+//     "strict": true,
+//     "esModuleInterop": true,
+//     "ignoreDeprecations": "6.0"
+//   }
+// }

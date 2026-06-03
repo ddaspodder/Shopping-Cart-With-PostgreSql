@@ -1,17 +1,29 @@
-import User from "../models/user.model";
 import AppError from "../utils/appError";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { CreateUserBody } from "../types/user.types";
 import { DatabaseError } from "pg";
+import { prisma } from "../db/prisma";
+
+export const getUserById = async (userId: number) => {
+  const user = await prisma.users.findUnique({ where: { id: userId } });
+  return user;
+};
 
 export const register = async (userData: CreateUserBody) => {
-  const { password } = userData;
+  const { email, password } = userData;
 
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
   try {
-    const user = await User.create({ ...userData, password: hashedPassword });
+    const user = await prisma.users.create({
+      data: { email: email, password: hashedPassword },
+      select: {
+        id: true,
+        email: true,
+        role: true,
+      },
+    });
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET!, {
       expiresIn: "1h" as any,
     });
@@ -29,7 +41,7 @@ export const signIn = async (
   email: CreateUserBody["email"],
   password: CreateUserBody["password"],
 ) => {
-  const user = await User.findOne({ email });
+  const user = await prisma.users.findUnique({ where: { email } });
   if (!user) throw new AppError("invalid email or password", 401);
   const hashedPassword = user.password;
   const isPasswordCorrect = await bcrypt.compare(password, hashedPassword);

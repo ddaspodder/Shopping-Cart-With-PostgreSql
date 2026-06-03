@@ -23,7 +23,7 @@ export const getAllProductsQueryParser = (
           keyof ParsedProductFilters,
           string,
         ];
-        filters[searchField] = { pattern: pattern };
+        filters[searchField] = { contains: pattern, mode: "insensitive" };
         break;
       case "sort":
         const [field, direction] = value.split(":") as [

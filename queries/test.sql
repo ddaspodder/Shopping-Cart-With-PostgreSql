@@ -36,3 +36,9 @@ WHERE
 SELECT * FROM cart_items;
 
 SELECT * FROM carts;
+
+INSERT INTO
+    products (name, price, is_active)
+VALUES ('Gaming Table', -10, TRUE);
+
+SELECT * FROM products;
