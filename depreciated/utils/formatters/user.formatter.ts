@@ -1,4 +1,4 @@
-import { UserResponse, UserRow } from "../../types/user.types";
+import { UserResponse, UserRow } from "../../../src/types/user.types";
 
 export const formatUser = (user: UserRow): UserResponse => {
   return {

@@ -1,5 +1,5 @@
 import type { RequestHandler } from "express";
-import { roles } from "@prisma/client";
+import { ROLE } from "../constants/role.constansts";
 import AppError from "../utils/appError";
 
 export const authorizeRoles =
@@ -11,4 +11,4 @@ export const authorizeRoles =
     next();
   };
 
-export const adminGuard = authorizeRoles([roles.admin]);
+export const adminGuard = authorizeRoles([ROLE.ADMIN]);

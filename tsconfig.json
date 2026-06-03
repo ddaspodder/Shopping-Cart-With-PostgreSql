@@ -49,19 +49,7 @@
   },
 
   // Files to include in the project (adjust as needed)
-  "include": [
-    "src",
-    "depreciated/tests",
-    "depreciated/scripts",
-    "*.config.ts",
-    "depreciated/constants",
-    "depreciated/db/connectDB.ts",
-    "depreciated/db/db.types.ts",
-    "depreciated/db/pool.ts",
-    "depreciated/utils/formatters",
-    "depreciated/utils/queryBuilder",
-    "depreciated/utils/responseHandler.ts"
-  ],
+  "include": ["src", "*.config.ts"],
 
   // Common excludes
   "exclude": ["node_modules", "dist"]

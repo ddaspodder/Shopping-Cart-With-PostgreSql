@@ -1,4 +1,7 @@
-import { CartWithItemsRow, CartItemResponse } from "../../types/cart.types";
+import {
+  CartWithItemsRow,
+  CartItemResponse,
+} from "../../../src/types/cart.types";
 
 export const cartFormatter = (
   cart: CartWithItemsRow[],
