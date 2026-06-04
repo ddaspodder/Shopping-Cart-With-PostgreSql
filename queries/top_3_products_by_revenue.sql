@@ -1,3 +1,4 @@
+-- Active: 1779614499007@@ep-billowing-feather-apl4nno8-pooler.c-7.us-east-1.aws.neon.tech@5432@shopping_cart_prisma@public
 --top 3 by descending total_revenue
 SELECT p.*, COALESCE(SUM(oi.price), 0) as total_revenue
 FROM products as p

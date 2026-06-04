@@ -42,3 +42,10 @@ INSERT INTO
 VALUES ('Gaming Table', -10, TRUE);
 
 SELECT * FROM products;
+
+SELECT
+    created_at::DATE as created_date,
+    COUNT(*) as order_count
+FROM orders
+GROUP BY
+    created_at::DATE;
