@@ -2,11 +2,12 @@ import AppError from "../utils/appError";
 import { Prisma } from "@prisma/client";
 import { prisma } from "./../db/prisma";
 
+import { FindAllProductsParsedOptions } from "../types/product.types";
+
 import {
-  FindAllProductsParsedOptions,
-  CreateProductBody,
-  UpdateProductBody,
-} from "../types/product.types";
+  CreateProductInput,
+  UpdateProductInput,
+} from "../schemas/product.schema";
 
 export const getAllProducts = async ({
   filters,
@@ -41,7 +42,7 @@ export const getActiveProductById = async (id: number) => {
   return product;
 };
 
-export const addProduct = async (data: CreateProductBody) => {
+export const addProduct = async (data: CreateProductInput) => {
   const { name, price } = data;
   const newProduct = await prisma.products.create({
     data: { name, price },
@@ -49,7 +50,7 @@ export const addProduct = async (data: CreateProductBody) => {
   return newProduct;
 };
 
-export const updateProduct = async (id: number, data: UpdateProductBody) => {
+export const updateProduct = async (id: number, data: UpdateProductInput) => {
   await getActiveProductById(id);
   const product = await prisma.products.update({
     where: { id },

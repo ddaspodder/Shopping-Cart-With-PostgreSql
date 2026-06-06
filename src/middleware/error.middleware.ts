@@ -1,7 +1,7 @@
 import type { ErrorRequestHandler } from "express";
 import AppError from "../utils/appError";
 import { failure } from "../../depreciated/utils/responseHandler";
-import { getPostgresErrorResponse } from "../utils/postgreErrorMap";
+import { getPrismaErrorResponse } from "../utils/prismaErrorMap";
 
 const errorMiddleware: ErrorRequestHandler = (err, req, res, next) => {
   console.error((err as Error).stack);
@@ -10,9 +10,9 @@ const errorMiddleware: ErrorRequestHandler = (err, req, res, next) => {
     return failure(res, err.message, err.statusCode);
   }
 
-  const pgResp = getPostgresErrorResponse(err);
-  if (pgResp) {
-    return failure(res, pgResp.message, pgResp.statusCode);
+  const prismaErrResp = getPrismaErrorResponse(err);
+  if (prismaErrResp) {
+    return failure(res, prismaErrResp.message, prismaErrResp.statusCode);
   }
 
   return failure(res, "something went wrong", 500);

@@ -7,7 +7,7 @@ export const authorizeRoles =
   (req, res, next) => {
     const user = req.user;
     if (!user || !roles.includes(user.role))
-      return next(new AppError("Permission denied", 403));
+      return next(new AppError("User doesn't have required permission", 403));
     next();
   };
 

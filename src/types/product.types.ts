@@ -7,16 +7,6 @@ export interface GetAllProductsQuery {
   price?: string;
 }
 
-// export type ParsedProductFilters = {
-//   name?: string | { pattern: string };
-//   price?: string | { pattern: string };
-// };
-
-// export type ProductFilters = ParsedProductFilters & {
-//   id?: number;
-//   isActive?: boolean;
-// };
-
 interface Pattern {
   contains: string;
   mode: "insensitive";

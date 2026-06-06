@@ -8,7 +8,7 @@ import { authValidator } from "../middleware/validators/auth.validator";
 
 const router = express.Router();
 
-router.post("/register", bodyValidator, ...authValidator, registerController);
-router.post("/signin", bodyValidator, ...authValidator, signInController);
+router.post("/register", bodyValidator, authValidator, registerController);
+router.post("/signin", bodyValidator, authValidator, signInController);
 
 export default router;

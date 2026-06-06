@@ -1,3 +1,4 @@
+import { ProductsQuery } from "../schemas/product.schema";
 import {
   GetAllProductsQuery,
   ProductFilters,
@@ -7,7 +8,7 @@ import {
 } from "../types/product.types";
 
 export const getAllProductsQueryParser = (
-  query: GetAllProductsQuery,
+  query: ProductsQuery,
 ): FindAllProductsParsedOptions => {
   const filters: ProductFilters = {};
   const sort: ProductSort[] = [];

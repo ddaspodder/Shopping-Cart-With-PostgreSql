@@ -1,5 +1,5 @@
 import { prisma } from "../db/prisma";
-import { Prisma, type Orders } from "@prisma/client";
+import { type Orders } from "@prisma/client";
 import AppError from "../utils/appError";
 import { clearCart } from "./cart.service";
 

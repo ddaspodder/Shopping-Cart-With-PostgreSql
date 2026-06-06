@@ -1,19 +1,13 @@
-import type { UserRow } from "./user.types";
-
-// declare module "express-serve-static-core" {
-//   interface Request {
-//     user?: UserRow;
-//   }
-// }
+import { ProductsQuery } from "../schemas/product.schema";
+import type { CreateUserInput } from "../schemas/user.schema";
 
 declare global {
   namespace Express {
     interface Request {
-      user?: UserRow;
+      user?: CreateUserInput;
+      validatedProductQuery: ProductsQuery;
     }
   }
 }
-
-type THIS_SHOULD_BREAK = DoesNotExist;
 
 export {};

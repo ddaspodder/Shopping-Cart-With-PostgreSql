@@ -176,4 +176,26 @@ const mostExpensiveProductEverOrdered = async () =>
     },
   });
 
-top5ProductsByRevenue().then(console.log);
+const createDuplicateCart = async () => {
+  const userId = 1;
+  const productId = 1;
+  const quantity = 1;
+  const cart = await prisma.carts.create({
+    data: { userId, cartItems: { create: { productId, quantity } } },
+  });
+  return cart;
+};
+
+const createDuplicateUser = async () => {
+  const user = await prisma.users.create({
+    data: {
+      email: "test5@gmail.com",
+      password: "test1234",
+    },
+  });
+  return user;
+};
+
+createDuplicateUser()
+  .then(console.log)
+  .catch((err) => console.log(err.meta.target));

@@ -8,17 +8,13 @@ import {
   deleteProduct,
 } from "../services/product.service";
 import { getAllProductsQueryParser } from "../utils/queryParser";
-// import {
-//   productFormatter,
-//   productListFormatter,
-// } from "../utils/formatters/product.formatter";
 import AppError from "../utils/appError";
 import { success } from "../../depreciated/utils/responseHandler";
 
 export const getAllProductsController = asyncHandler(
   async (req: Request, res: Response) => {
     const { filters, sort, limit, offset } = getAllProductsQueryParser(
-      req.query,
+      req.validatedProductQuery,
     );
     const products = await getAllProducts({ filters, sort, limit, offset });
     success(res, products);
