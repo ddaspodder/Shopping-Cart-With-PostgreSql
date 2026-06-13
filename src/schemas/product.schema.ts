@@ -3,7 +3,7 @@ import { z } from "zod";
 export const productsQuerySchema = z.object({
   search: z
     .string("Search must be a string")
-    .regex(/^(name):.+$/, "Search must be 'name:<text>' or 'price:<text>'")
+    .regex(/^(name):.+$/, "Search must be 'name:<text>'")
     .optional(),
   sort: z
     .string("Sort must be a string")
@@ -18,7 +18,14 @@ export const productsQuerySchema = z.object({
     .min(0, "Offset must be a non-negative number")
     .optional(),
   name: z.string("Name must be a string").optional(),
-  price: z.coerce.number("Price must be a number").optional(),
+  price_min: z.coerce
+    .number("Price min must be a number")
+    .min(0, "Price min must be a non-negative number")
+    .optional(),
+  price_max: z.coerce
+    .number("Price max must be a number")
+    .min(0, "Price max must be a non-negative number")
+    .optional(),
 });
 
 export const createProductSchema = z.object({

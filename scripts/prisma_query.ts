@@ -1,12 +1,20 @@
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 
 const connectionString = `postgresql://neondb_owner:npg_rDa0O4gEGxLo@ep-billowing-feather-apl4nno8-pooler.c-7.us-east-1.aws.neon.tech/shopping_cart_prisma?sslmode=require&channel_binding=require`;
 
 const adapter = new PrismaPg({ connectionString });
 const prisma = new PrismaClient({ adapter });
 
-const getAllProducts = async () => prisma.products.findMany();
+const getAllProducts = async () => {
+  const filters = {
+    name: { contains: "Gaming Chair", mode: "insensitive" },
+  };
+  return prisma.products.findMany({
+    where: { isActive: true, ...(filters as Prisma.ProductsWhereInput) },
+  });
+};
 
 const totalSpentByUser = async (userId: number) =>
   prisma.orders.aggregate({
@@ -196,6 +204,4 @@ const createDuplicateUser = async () => {
   return user;
 };
 
-createDuplicateUser()
-  .then(console.log)
-  .catch((err) => console.log(err.meta.target));
+getAllProducts().then(console.log);

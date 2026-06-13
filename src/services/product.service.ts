@@ -20,10 +20,23 @@ export const getAllProducts = async ({
   const products = await prisma.products.findMany({
     where: { isActive: true, ...(filters as Prisma.ProductsWhereInput) },
     orderBy: sort,
-    take: options.limit,
-    skip: options.offset,
+    ...(options.limit ? { take: options.limit } : {}),
+    ...(options.offset ? { skip: options.offset } : {}),
   });
-  return products;
+
+  const productCount = await prisma.products.aggregate({
+    _count: { _all: true },
+    where: {
+      isActive: true,
+      ...(filters as Prisma.ProductsWhereInput),
+    },
+  });
+
+  const hasNext = options.limit
+    ? (options.offset ?? 0) + options.limit < productCount._count._all
+    : false;
+
+  return { products, hasNext, totalCount: productCount._count._all };
 };
 
 export const getProductById = async (id: number) => {

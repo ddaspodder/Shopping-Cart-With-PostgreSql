@@ -4,7 +4,8 @@ export interface GetAllProductsQuery {
   limit?: string;
   offset?: string;
   name?: string;
-  price?: string;
+  price_min?: string;
+  price_max?: string;
 }
 
 interface Pattern {
@@ -12,14 +13,13 @@ interface Pattern {
   mode: "insensitive";
 }
 
-export interface ParsedProductFilters {
-  name?: string | Pattern;
-  price?: string | Pattern;
+interface Range {
+  gte?: number;
+  lte?: number;
 }
-
-export interface ProductFilters extends ParsedProductFilters {
-  id?: number;
-  isActive?: boolean;
+export interface ProductFilters {
+  name?: string | Pattern;
+  price?: Range;
 }
 
 export interface ProductSort {
@@ -38,7 +38,7 @@ export interface FindAllProductsParsedOptions extends Pick<
   FindAllProductsOptions,
   "sort" | "limit" | "offset"
 > {
-  filters: ParsedProductFilters;
+  filters: ProductFilters;
 }
 
 export interface CreateProductBody {

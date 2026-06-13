@@ -1,10 +1,10 @@
 import { ProductsQuery } from "../schemas/product.schema";
-import type { CreateUserInput } from "../schemas/user.schema";
+import { UserResponse } from "../types/user.types";
 
 declare global {
   namespace Express {
     interface Request {
-      user?: CreateUserInput;
+      user?: UserResponse;
       validatedProductQuery: ProductsQuery;
     }
   }

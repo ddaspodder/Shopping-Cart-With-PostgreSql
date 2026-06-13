@@ -1,9 +1,7 @@
 import { ProductsQuery } from "../schemas/product.schema";
 import {
-  GetAllProductsQuery,
   ProductFilters,
   ProductSort,
-  ParsedProductFilters,
   FindAllProductsParsedOptions,
 } from "../types/product.types";
 
@@ -16,31 +14,37 @@ export const getAllProductsQueryParser = (
   let offset;
 
   for (let param of Object.keys(query)) {
-    const key = param as keyof GetAllProductsQuery;
-    const value = query[key] as string;
+    const key = param as keyof ProductsQuery;
+    const value = query[key];
     switch (key) {
       case "search":
-        const [searchField, pattern] = value.split(":") as [
-          keyof ParsedProductFilters,
+        const [searchField, pattern] = (value as string).split(":") as [
+          "name",
           string,
         ];
         filters[searchField] = { contains: pattern, mode: "insensitive" };
         break;
       case "sort":
-        const [field, direction] = value.split(":") as [
+        const [field, direction] = (value as string).split(":") as [
           ProductSort["field"],
           ProductSort["direction"],
         ];
         sort.push({ field: field, direction: direction });
         break;
       case "limit":
-        limit = parseInt(value);
+        limit = value as number;
         break;
       case "offset":
-        offset = parseInt(value);
+        offset = value as number;
+        break;
+      case "price_min":
+        filters.price = { gte: value as number };
+        break;
+      case "price_max":
+        filters.price = { lte: value as number };
         break;
       default:
-        filters[key] = value;
+        filters[key] = value as string;
     }
   }
   return { filters, sort, limit, offset };

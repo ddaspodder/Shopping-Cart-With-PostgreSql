@@ -72,6 +72,9 @@ export const addToCart = async (
       include: {
         cartItems: {
           include: { products: true },
+          orderBy: {
+            createdAt: "desc",
+          },
         },
       },
     });
@@ -122,6 +125,9 @@ export const removeFromCart = async (
       include: {
         cartItems: {
           include: { products: true },
+          orderBy: {
+            createdAt: "desc",
+          },
         },
       },
     });
