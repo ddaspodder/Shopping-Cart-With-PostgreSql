@@ -1,4 +1,4 @@
-import { ProductRow, ProductResponse } from "../../types/product.types";
+import { ProductRow, ProductResponse } from "../../../src/types/product.types";
 
 export const productFormatter = (product: ProductRow): ProductResponse => {
   return {

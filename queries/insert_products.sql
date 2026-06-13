@@ -1,3 +1,4 @@
+-- Active: 1779614499007@@ep-billowing-feather-apl4nno8-pooler.c-7.us-east-1.aws.neon.tech@5432@shopping_cart_prisma
 INSERT INTO
     products (name, price)
 VALUES ('Mechanical Keyboard', 129.99),

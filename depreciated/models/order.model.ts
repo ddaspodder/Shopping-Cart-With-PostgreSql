@@ -1,6 +1,6 @@
 import pool from "../db/pool";
 import { DbClient } from "../db/db.types";
-import { OrderWithItemsRow, STATUS } from "../types/order.types";
+import { OrderWithItemsRow, STATUS } from "../../src/types/order.types";
 
 const findOrdersWithItemsByUserId = async (
   userId: number,

@@ -1,7 +1,7 @@
 import { CreateUserInput, UserFilters, UserRow } from "../types/user.types";
 import { DbClient } from "../db/db.types";
 import pool from "../db/pool";
-const { buildWhereClause } = require("../utils/queryBuilder");
+import { buildWhereClause } from "../utils/queryBuilder";
 
 class User {
   email: string;

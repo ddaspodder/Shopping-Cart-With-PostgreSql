@@ -1,5 +1,5 @@
 const fs = require("fs/promises");
-const AppError = require("./appError");
+const AppError = require("../../src/utils/appError");
 const path = require("path");
 
 const rootPath = process.cwd();

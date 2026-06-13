@@ -1,4 +1,7 @@
-import { OrderResponse, OrderWithItemsRow } from "../../types/order.types";
+import {
+  OrderResponse,
+  OrderWithItemsRow,
+} from "../../../src/types/order.types";
 
 export const orderFormatter = (
   order: OrderWithItemsRow[],

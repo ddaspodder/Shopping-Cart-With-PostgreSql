@@ -1,7 +1,7 @@
 require("dotenv").config({ path: ".env.test" });
-const connectDB = require("../src/db/connectDB");
+const connectDB = require("../depreciated/db/connectDB");
 
-const pool = require("../src/db/pool");
+const pool = require("../depreciated/db/pool");
 
 beforeAll(async () => {
   await connectDB();
