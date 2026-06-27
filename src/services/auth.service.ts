@@ -27,7 +27,7 @@ export const register = async (userData: CreateUserInput) => {
     },
   });
   const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET!, {
-    expiresIn: "1h" as any,
+    expiresIn: process.env.JWT_EXPIRES_IN ?? ("1h" as any),
   });
   return { user, token };
 };
@@ -42,7 +42,7 @@ export const signIn = async (
   const isPasswordCorrect = await bcrypt.compare(password, hashedPassword);
   if (!isPasswordCorrect) throw new AppError("Invalid email or password", 401);
   const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET!, {
-    expiresIn: "1h" as any,
+    expiresIn: process.env.JWT_EXPIRES_IN ?? ("1h" as any),
   });
   return { token };
 };

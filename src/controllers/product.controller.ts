@@ -9,7 +9,7 @@ import {
 } from "../services/product.service";
 import { getAllProductsQueryParser } from "../utils/queryParser";
 import AppError from "../utils/appError";
-import { success } from "../../depreciated/utils/responseHandler";
+import { success } from "../utils/responseHandler";
 
 export const getAllProductsController = asyncHandler(
   async (req: Request, res: Response) => {

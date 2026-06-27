@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from "../docs/openapi";
 
 export const productsQuerySchema = z.object({
   search: z
@@ -28,6 +28,10 @@ export const productsQuerySchema = z.object({
     .optional(),
 });
 
+export const productParamsSchema = z.object({
+  id: z.coerce.number().int().nonnegative(),
+});
+
 export const createProductSchema = z.object({
   name: z.string({
     error: (issue) =>
@@ -46,6 +50,31 @@ export const updateProductSchema = z.object({
     .optional(),
 });
 
+export const getAllProductsResponseSchema = z.object({
+  products: z.array(
+    z.object({
+      id: z.number(),
+      name: z.string(),
+      price: z.string(),
+      isActive: z.boolean(),
+    }),
+  ),
+  hasNext: z.boolean(),
+  totalCount: z.number(),
+});
+
+export const productSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  price: z.string(),
+  isActive: z.boolean(),
+});
+
 export type ProductsQuery = z.infer<typeof productsQuerySchema>;
+export type ProductParams = z.infer<typeof productParamsSchema>;
 export type CreateProductInput = z.infer<typeof createProductSchema>;
 export type UpdateProductInput = z.infer<typeof updateProductSchema>;
+export type GetAllProductsResponse = z.infer<
+  typeof getAllProductsResponseSchema
+>;
+export type ProductResponse = z.infer<typeof productSchema>;
