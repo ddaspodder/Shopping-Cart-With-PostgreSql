@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { register, signIn, getUserDetails } from "../services/auth.service";
 import asyncHandler from "../utils/asyncHandler";
-import { success } from "../../depreciated/utils/responseHandler";
+import { success } from "../utils/responseHandler";
 
 export const registerController = asyncHandler(
   async (req: Request, res: Response) => {

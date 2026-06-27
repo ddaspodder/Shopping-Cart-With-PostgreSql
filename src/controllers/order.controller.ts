@@ -7,7 +7,7 @@ import {
 } from "../services/order.service";
 import asyncHandler from "../utils/asyncHandler";
 import AppError from "../utils/appError";
-import { success } from "../../depreciated/utils/responseHandler";
+import { success } from "../utils/responseHandler";
 
 export const createOrderController = asyncHandler(
   async (req: Request, res: Response) => {

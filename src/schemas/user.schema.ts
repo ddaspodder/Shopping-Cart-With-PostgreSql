@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from "../docs/openapi";
 
 export const createUserSchema = z.object({
   email: z.email({
@@ -18,4 +18,27 @@ export const createUserSchema = z.object({
     ),
 });
 
+export const signInUserSchema = createUserSchema;
+
+export const userResponseSchema = z.object({
+  id: z.number(),
+  email: z.string(),
+  role: z.string(),
+});
+
+export const tokenResponseSchema = z.string();
+
+export const createUserResponseSchema = z.object({
+  user: userResponseSchema,
+  token: tokenResponseSchema,
+});
+
+export const signInResponseSchema = z.object({
+  token: tokenResponseSchema,
+});
+
 export type CreateUserInput = z.infer<typeof createUserSchema>;
+export type SignInInput = z.infer<typeof signInUserSchema>;
+export type UserResponse = z.infer<typeof userResponseSchema>;
+export type CreateUserResponse = z.infer<typeof createUserResponseSchema>;
+export type SignInResponse = z.infer<typeof signInResponseSchema>;

@@ -3,13 +3,13 @@ import express from "express";
 import helmet from "helmet";
 import cors from "cors";
 import rateLimit from "express-rate-limit";
-// import swaggerUi from "swagger-ui-express";
-// import swaggerSpec from "./swagger/swagger";
 import productRoutes from "./routes/product.routes";
 import cartRoutes from "./routes/cart.routes";
 import orderRoutes from "./routes/order.routes";
 import authRoutes from "./routes/auth.routes";
 import errorMiddleware from "./middleware/error.middleware";
+import swaggerUi from "swagger-ui-express";
+import { openApiDocument } from "./docs/swagger";
 import AppError from "./utils/appError";
 
 const app = express();
@@ -48,11 +48,13 @@ app.use("/api/cart", cartRoutes);
 
 app.use("/api/orders", orderRoutes);
 
+app.get("/api/docs/json", (_, res) => res.json(openApiDocument));
+
+app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(openApiDocument));
+
 app.get("/", (req: Request, res: Response) => {
   res.send("Express and PostgreSql Shopping API");
 });
-
-// app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use((req: Request, res: Response, next: NextFunction) => {
   next(new AppError("invalid route", 404));

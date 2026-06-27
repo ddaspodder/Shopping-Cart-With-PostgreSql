@@ -7,7 +7,7 @@ import {
 } from "../services/cart.service";
 import asyncHandler from "../utils/asyncHandler";
 import AppError from "../utils/appError";
-import { success } from "../../depreciated/utils/responseHandler";
+import { success } from "../utils/responseHandler";
 
 export const getCartController = asyncHandler(
   async (req: Request, res: Response) => {

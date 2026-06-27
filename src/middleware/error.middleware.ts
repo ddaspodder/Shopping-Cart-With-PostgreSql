@@ -1,6 +1,6 @@
 import type { ErrorRequestHandler } from "express";
 import AppError from "../utils/appError";
-import { failure } from "../../depreciated/utils/responseHandler";
+import { failure } from "../utils/responseHandler";
 import { getPrismaErrorResponse } from "../utils/prismaErrorMap";
 
 const errorMiddleware: ErrorRequestHandler = (err, req, res, next) => {
