@@ -33,24 +33,24 @@ app.use(
 app.use(express.json());
 
 app.use(
-  "/auth",
+  "/api/auth",
   rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
     max: 20, // limit each IP to 20 requests per windowMs for auth routes
   }),
 );
 
-app.use("/auth", authRoutes);
+app.use("/api/auth", authRoutes);
 
-app.use("/products", productRoutes);
+app.use("/api/products", productRoutes);
 
-app.use("/cart", cartRoutes);
+app.use("/api/cart", cartRoutes);
 
-app.use("/orders", orderRoutes);
+app.use("/api/orders", orderRoutes);
 
-app.get("/docs/json", (_, res) => res.json(openApiDocument));
+app.get("/api/docs/json", (_, res) => res.json(openApiDocument));
 
-app.use("/docs", swaggerUi.serve, swaggerUi.setup(openApiDocument));
+app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(openApiDocument));
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Express and PostgreSql Shopping API");
