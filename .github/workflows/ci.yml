@@ -1,4 +1,4 @@
-name: Shopping Cart Frontend CI
+name: Shopping Cart Backend CI
 on:
   push:
     branches:
