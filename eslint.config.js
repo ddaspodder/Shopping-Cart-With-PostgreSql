@@ -1,13 +1,13 @@
 module.exports = {
-  files: ["**/*.js", "**/*.ts"],
+  files: ["src/**/*.{js,ts}", "*.config.ts", "scripts/**/*.{js,ts}"],
+  ignores: ["dist/**", "deprecated/**"],
   languageOptions: {
-    parser: require.resolve("@typescript-eslint/parser"),
+    parser: require("@typescript-eslint/parser"),
     parserOptions: {
       project: "./tsconfig.json",
       tsconfigRootDir: __dirname,
       ecmaVersion: 2021,
       sourceType: "module",
-      extraFileExtensions: [".ts", ".tsx"],
     },
     ecmaVersion: 2021,
     sourceType: "module",

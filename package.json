@@ -11,12 +11,13 @@
     "build": "tsc -p tsconfig.json",
     "start": "cross-env NODE_ENV=production node dist/src/server.js",
     "test": "cross-env NODE_ENV=test jest --runInBand",
+    "type-check": "tsc --noEmit",
     "init-db": "cross-env NODE_ENV=production node scripts/initDB.js",
     "init-test-db": "cross-env NODE_ENV=test node scripts/initDB.js",
     "migrate": "cross-env NODE_ENV=development node scripts/migrate.js",
     "run-query": "cross-env NODE_ENV=development node scripts/query.js",
     "test:watch": "cross-env NODE_ENV=test jest --runInBand --watch",
-    "lint": "eslint . --ext .js"
+    "lint": "eslint ."
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",

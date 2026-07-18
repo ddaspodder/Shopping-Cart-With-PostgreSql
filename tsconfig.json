@@ -49,15 +49,10 @@
   },
 
   // Files to include in the project (adjust as needed)
-  "include": [
-    "src",
-    "*.config.ts",
-    "scripts",
-    "depreciated/utils/postgreErrorMap.ts"
-  ],
+  "include": ["src", "*.config.ts", "scripts"],
 
   // Common excludes
-  "exclude": ["node_modules", "dist"]
+  "exclude": ["node_modules", "dist", "depreciated"]
 }
 // {
 //   "compilerOptions": {
