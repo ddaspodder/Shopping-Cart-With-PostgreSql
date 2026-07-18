@@ -49,10 +49,10 @@
   },
 
   // Files to include in the project (adjust as needed)
-  "include": ["src", "*.config.ts", "scripts"],
+  "include": ["src", "*.config.ts"],
 
   // Common excludes
-  "exclude": ["node_modules", "dist", "depreciated"]
+  "exclude": ["node_modules", "dist", "depreciated", "scripts"]
 }
 // {
 //   "compilerOptions": {

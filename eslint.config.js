@@ -1,5 +1,5 @@
 module.exports = {
-  files: ["src/**/*.{js,ts}", "*.config.ts", "scripts/**/*.{js,ts}"],
+  files: ["src/**/*.{js,ts}", "*.config.ts"],
   ignores: ["dist/**", "deprecated/**"],
   languageOptions: {
     parser: require("@typescript-eslint/parser"),
