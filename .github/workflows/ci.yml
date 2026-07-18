@@ -17,9 +17,9 @@ jobs:
 
       - run: npm ci
 
-      # - run: npx prisma generate
-      #   env:
-      #     DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      - run: npx prisma generate
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
       - run: npm run lint
 
