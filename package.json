@@ -8,7 +8,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon --watch src --exec ts-node --files src/server.ts",
-    "build": "tsc -p tsconfig.json",
+    "build": "npx prisma generate && tsc -p tsconfig.json",
     "start": "cross-env NODE_ENV=production node dist/src/server.js",
     "test": "cross-env NODE_ENV=test jest --runInBand",
     "type-check": "tsc --noEmit",
